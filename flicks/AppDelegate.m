@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "MoviesViewController.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +18,31 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
+    
+    // Set up the first View Controller
+    UINavigationController *nowPlayingNavigationController = [storyboard instantiateViewControllerWithIdentifier: @"moviesNavigationController"];
+    MoviesViewController *nowPlayingViewController = (MoviesViewController*)[nowPlayingNavigationController topViewController];
+    nowPlayingViewController.movieListType = MovieListTypeNowPlaying;
+    nowPlayingNavigationController.tabBarItem.title = @"Now Playing";
+    nowPlayingNavigationController.tabBarItem.image = [UIImage imageNamed:@"now_playing.png"];
+    
+    // Set up the second View Controller
+    UINavigationController *topRatedNavigationController = [storyboard instantiateViewControllerWithIdentifier: @"moviesNavigationController"];
+    MoviesViewController *topRatedViewController = (MoviesViewController*)[topRatedNavigationController topViewController];
+    topRatedViewController.movieListType = MovieListTypeTopRated;
+    topRatedNavigationController.tabBarItem.title = @"Top Rated";
+    topRatedNavigationController.tabBarItem.image = [UIImage imageNamed:@"top_rated.png"];
+    
+    // Set up the Tab Bar Controller to have two tabs
+    UITabBarController *tabBarController = [[UITabBarController alloc] init];
+    [tabBarController setViewControllers:@[nowPlayingNavigationController, topRatedNavigationController]];
+    tabBarController.tabBar.tintColor = [UIColor blackColor];
+    
+    // Make the Tab Bar Controller the root view controller
+    self.window.rootViewController = tabBarController;
+    [self.window makeKeyAndVisible];
     return YES;
 }
 
